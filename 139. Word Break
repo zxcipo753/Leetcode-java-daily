@@ -16,3 +16,31 @@
 返回结果：在循环结束后，dp[s.length()] 将给出答案。如果 s 可以完全由 wordDict 分割，则返回 true，否则返回 false。
 
 这就是动态规划的魅力！你从一个小问题开始（如何组合一个很短的字符串），然后基于这个答案来解决更大的问题，直到得到最终答案。希望这个解释对你有帮助！*/
+public class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        // dp[i] 表示字符串s的前i个字符是否可以被wordDict分割
+        boolean[] dp = new boolean[s.length() + 1];
+        
+        // 初始化：空字符串总是可以被分割的
+        dp[0] = true;
+
+        // 从第一个字符开始检查
+        for (int i = 1; i <= s.length(); i++) {
+            // 尝试使用每一个单词来分割
+            //for (int i = 0; i < wordDict.size(); i++) {
+            //    String word = wordDict.get(i);
+            for (String word : wordDict) {
+                // 如果word适合作为s的一个后缀，且前面的部分已经被成功分割
+                // 则认为s的前i个字符可以被成功分割
+                if (word.length() <= i && dp[i - word.length()] && s.substring(i - word.length(), i).equals(word)) {
+                    dp[i] = true;
+                    // 已经确定了s的前i个字符可以被成功分割，因此直接跳出循环
+                    break; 
+                }
+            }
+        }
+        // 返回s的所有字符是否可以被wordDict成功分割的结果
+        return dp[s.length()];
+    }
+}
+
