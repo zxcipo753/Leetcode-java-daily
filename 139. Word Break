@@ -43,4 +43,11 @@ public class Solution {
         return dp[s.length()];
     }
 }
-
+/* 如何理解 if (word.length() <= i && dp[i - word.length()] && s.substring(i - word.length(), i).equals(word)) {
+                    dp[i] = true？
+1. word.length() <= i:
+这个条件确保当前考虑的词 word 不会超过从字符串开始到当前位置 i 的长度。换句话说，如果我们正在考虑字符串的第 i 个位置，并且当前考虑的词 word 的长度大于 i，那么这显然是不可能的，因为词 word 无法适应那么小的空间。
+2.dp[i - word.length()]:
+这个条件是核心的。它确保了，在我们考虑将 word 作为当前位置的后缀之前，字符串的前面部分（直到当前词开始的位置）可以被 wordDict 分割。这确保了整个字符串到目前为止（包括当前考虑的 word）都可以由 wordDict 中的词组成。
+3.s.substring(i - word.length(), i).equals(word):
+这个条件检查从 i - word.length() 到 i 位置的子字符串是否确实等于 word。这是为了验证当前考虑的 word 是否确实是字符串在位置 i 的一个有效后缀。*/
