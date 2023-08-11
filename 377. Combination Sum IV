@@ -1,0 +1,76 @@
+class Solution {
+    public int combinationSum4(int[] nums, int target) {
+    // 初始化 dp 数组
+    int[] dp = new int[target + 1];
+    dp[0] = 1;
+
+    // 自底向上地计算 dp 值
+    for (int i = 1; i <= target; i++) {
+        for (int num : nums) {
+            // 确保 i-num 是一个有效索引，并累加到 dp[i]
+            if (i - num >= 0) {
+                dp[i] += dp[i - num];
+            }
+        }
+    }
+
+    // 返回达到目标数字的组合数
+    return dp[target];
+}
+
+}
+
+
+
+/*如果target是0，那么输出确实是1，因为只有一种方法可以得到一个和为0的组合，那就是不选择任何数字。
+
+这个基本情况对于动态规划方法非常重要，因为它为我们提供了一个起点。从这个起点开始，我们可以逐步建立解决方案，直到达到我们的目标值。*/
+
+
+/*  自顶向下的方法 （递归+记忆化）
+class Solution {
+    private int[] memo;
+
+    public int combinationSum4(int[] nums, int target) {
+        memo = new int[target + 1];
+        Arrays.fill(memo, -1);
+        memo[0] = 1;
+        return helper(nums, target);
+    }
+
+    private int helper(int[] nums, int target) {
+        // 如果已经计算过此target的值，则直接返回
+        if (memo[target] != -1) {
+            return memo[target];
+        }
+
+        int res = 0;
+        for (int num : nums) {
+            if (target >= num) {
+                res += helper(nums, target - num);
+            }
+        }
+
+        // 记住此target的结果并返回
+        memo[target] = res;
+        return res;
+    }
+}
+*/
+/*memo[0] = 1 （基本情况）
+memo[1] = 1 （只有一个1）
+memo[2] = 2 （两种方式：1+1 或 2）
+memo[3] = 4 （三种方式：1+1+1、1+2 或 2+1、3）
+memo[4] = 7 （四种方式：1+1+1+1、1+1+2、1+2+1、2+1+1、2+2、1+3、3+1）*/
+
+/*思维过程：
+
+这个问题可以通过动态规划来解决。但是首先，我们要理解题目的要求，我们希望找出所有可能的组合，使其和等于目标值。
+
+自顶向下：考虑从目标数字开始，并从该数字中减去数组中的任何数字，然后递归地解决新的较小的目标。例如，对于 [1,2,3] 和目标 4，我们可以从 4 开始并减去 [1,2,3] 中的任何数字，得到新的目标为 3、2 或 1。对于每个新目标，我们再次进行减法操作。
+
+自底向上：我们可以从数字 0 开始并尝试添加数组中的任何数字，存储达到每个数字的组合数。例如，对于 [1,2,3] 和目标 4，达到数字 1 的方法有1种（只有数字1），达到数字2的方法有2种（1+1 或 2），达到数字3的方法有4种（1+1+1、1+2、2+1、3）。
+
+因为这是个组合问题而不是排列问题，所以我们不能直接使用常规的递归回溯。在这里，我们使用动态规划。具体来说，我们创建一个数组 dp，其中 dp[i] 代表达到和 i 的组合数。我们将其初始化为0，并设置 dp[0] = 1，因为达到和0的方法只有一种：不选择任何数字。
+
+为了填充数组 dp，我们对于每个 i（从1到目标数字），尝试从 i 中减去数组中的每个数字，并累加 dp 值。*/
