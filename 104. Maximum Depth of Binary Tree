@@ -1,0 +1,77 @@
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public int maxDepth(TreeNode root) {
+        // 基本情况：如果节点为空，返回0
+        if (root == null) {
+            return 0;
+        }
+        
+        // 递归计算左子树的最大深度
+        int leftDepth = maxDepth(root.left);
+        // 递归计算右子树的最大深度
+        int rightDepth = maxDepth(root.right);
+        
+        // 返回左子树和右子树中的较大深度 + 1
+        return Math.max(leftDepth, rightDepth) + 1;
+    }
+}
+
+
+/*// BFS Method
+public class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int x) { val = x; }
+}
+
+public class Solution {
+    public int maxDepth(TreeNode root) {
+        // 如果根节点为空，则深度为0
+        if (root == null) {
+            return 0;
+        }
+        
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int depth = 0;
+
+        while (!queue.isEmpty()) {
+            int levelSize = queue.size(); // 当前层的节点数
+
+            // 遍历当前层的所有节点
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode currentNode = queue.poll();
+                
+                // 将当前节点的子节点入队，以便下次循环处理
+                if (currentNode.left != null) {
+                    queue.offer(currentNode.left);
+                }
+                if (currentNode.right != null) {
+                    queue.offer(currentNode.right);
+                }
+            }
+            
+            // 完成当前层的遍历，深度加1
+            depth++;
+        }
+
+        return depth;
+    }
+}
+*/
