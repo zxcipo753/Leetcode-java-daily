@@ -1,0 +1,54 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    int maxSum = Integer.MIN_VALUE;  // 初始化一个全局的最小值
+
+    public int maxPathSum(TreeNode root) {
+        maxGain(root);
+        return maxSum;
+    }
+
+    private int maxGain(TreeNode node) {
+        if (node == null) return 0;
+
+        // 递归计算左右子树的最大贡献值
+        // 只有在最大贡献值大于0时，才会选取对应子树
+        int leftGain = Math.max(maxGain(node.left), 0);
+        int rightGain = Math.max(maxGain(node.right), 0);
+
+        // 当前节点的值与左右子树的最大贡献值之和为该节点为根的子树的最大路径和
+        int newPathSum = node.val + leftGain + rightGain;
+
+        // 更新答案
+        maxSum = Math.max(maxSum, newPathSum);
+
+        // 返回节点的最大贡献值
+        return node.val + Math.max(leftGain, rightGain);
+    }
+}
+/*
+1. 后序遍历：
+在这个解法中，我们首先访问了节点的左右子树，然后再处理节点本身，这就是后序遍历的特点。为什么需要后序遍历？因为要计算当前节点的最大路径和，你需要先知道左右子树的信息，然后才能做出决策。
+
+2. 递归：
+这是一个自上而下的递归过程。当我们在函数maxGain中对左子树调用maxGain(node.left)时，这个递归调用会计算出左子树的最大贡献值。同样的，maxGain(node.right)会计算出右子树的最大贡献值。
+
+3. 动态规划：
+动态规划是这个解法的核心部分，但这里的动态规划不同于常规的表格方法。在这里，动态规划的思想体现在如何从子问题的解（子树的最大贡献值）构建当前问题的解（当前子树的最大路径和）。对于每一个节点，我们都计算了从该节点“出发”的最大贡献值。这个贡献值基于它的左右子节点的贡献值。这种从底部到顶部的构建解的方法是动态规划的核心思想。
+
+4. 剪枝：
+通过这个语句int leftGain = Math.max(maxGain(node.left), 0);和int rightGain = Math.max(maxGain(node.right), 0);，我们实际上进行了剪枝。如果子树的最大贡献值是负数，我们可以忽略它，只取0。这意味着，在计算路径和时，我们只考虑那些贡献正值的路径。
+*/
