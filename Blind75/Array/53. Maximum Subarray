@@ -1,0 +1,75 @@
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int n = nums.length;
+        int maxSum = nums[0]; // 初始化最大子数组和为第一个元素的值
+        int currentSum = nums[0]; // 初始化当前子数组和为第一个元素的值
+
+        for (int i = 1; i < n; i++) {
+            // 计算当前子数组和，如果当前子数组和小于当前元素值，则从当前元素开始重新计算子数组和
+            currentSum = Math.max(nums[i], currentSum + nums[i]);
+            
+            // 更新最大子数组和
+            maxSum = Math.max(maxSum, currentSum);
+        }
+
+        return maxSum;
+    }
+} /* 辅助理解例子nums = [2, -3, 1, 5] */
+
+/*双循环
+class Solution { 
+    public int maxSubArray(int[] nums) {
+        int n = nums.length;
+        int maxSum = Integer.MIN_VALUE;
+
+        for (int i = 0; i < n; i++) {
+            int currentSum = 0;
+            for (int j = i; j < n; j++) {
+                currentSum += nums[j]; // 将当前元素加入到当前子数组中
+                maxSum = Math.max(maxSum, currentSum); // 更新全局最大子数组和
+            }
+        }
+
+        return maxSum;
+    }
+}
+*/
+
+/*找出数列而不只是sum的单循环kadane算法
+class Solution {
+    public int[] maxSubArray(int[] nums) {
+        int n = nums.length;
+        int maxEndingHere = nums[0]; // 当前局部最优解，初始值为第一个元素
+        int maxSoFar = nums[0]; // 全局最优解，初始值为第一个元素
+        int start = 0; // 最大子序列的起始位置
+        int end = 0; // 最大子序列的结束位置
+        int tempStart = 0; // 临时起始位置，用于记录局部最优解的起始位置
+
+        for (int i = 1; i < n; i++) {
+            // 判断是否要更新局部最优解的起始位置
+            if (nums[i] > maxEndingHere + nums[i]) {
+                tempStart = i;
+                maxEndingHere = nums[i];
+            } else {
+                maxEndingHere = maxEndingHere + nums[i];
+            }
+
+            // 更新全局最优解
+            if (maxEndingHere > maxSoFar) {
+                maxSoFar = maxEndingHere;
+                start = tempStart;
+                end = i;
+            }
+        }
+
+        // 构造结果数组并返回
+        int[] result = new int[end - start + 1];
+        for (int i = start; i <= end; i++) {
+            result[i - start] = nums[i];
+        }
+
+        return result;
+    }
+}
+*/
+
