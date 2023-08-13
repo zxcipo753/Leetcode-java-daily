@@ -1,0 +1,24 @@
+class Solution {
+    public int maxArea(int[] height) {
+        // 思路：容器的容量由两个因素决定：两个指针之间的距离和两个指针所指向的高度中较小的一个。
+        int n = height.length;
+        int left = 0; // 左边界指针
+        int right = n - 1; // 右边界指针
+        int maxArea = 0; // 最大水容量
+        
+        // for (; left < right; left++)
+        while (left < right) {
+            int area = Math.min(height[left], height[right]) * (right - left); // 计算当前容器的水容量
+            maxArea = Math.max(maxArea, area); // 更新最大水容量
+            
+            // 移动较矮的边界指针
+            if (height[left] < height[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        
+        return maxArea;
+    }
+}
