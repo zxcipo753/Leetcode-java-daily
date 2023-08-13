@@ -1,0 +1,31 @@
+import java.util.HashSet;
+import java.util.Set;
+
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        Set<Integer> numSet = new HashSet<>(); // 创建一个HashSet用于存储数组中的元素
+
+        /*for (int num : nums) {
+            if (numSet.contains(num)) {
+                // 如果HashSet中已经包含了当前元素，说明数组中存在重复元素，返回true
+                return true;
+            } else {
+                // 否则，将当前元素添加到HashSet中
+                numSet.add(num);
+            }
+        }*/
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+            if (numSet.contains(num)) {
+                // 如果HashSet中已经包含了当前元素，说明数组中存在重复元素，返回true
+                return true;
+            } else {
+                // 否则，将当前元素添加到HashSet中
+                numSet.add(num);
+            }
+        }
+
+        // 遍历完成后仍未找到重复元素，返回false
+        return false;
+    }
+}
