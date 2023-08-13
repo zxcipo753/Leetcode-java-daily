@@ -1,0 +1,30 @@
+import java.util.Arrays;
+
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int n = nums.length;
+        int[] left = new int[n]; // 保存每个位置左边所有元素的乘积
+        int[] right = new int[n]; // 保存每个位置右边所有元素的乘积
+
+        // 初始化left数组，left数组第一个位置设为1
+        left[0] = 1;
+        for (int i = 1; i < n; i++) {
+            left[i] = left[i - 1] * nums[i - 1];
+        }
+        
+
+        // 初始化right数组，right数组第一个位置设为1
+        right[n - 1] = 1;
+        for (int i = n - 2; i >= 0; i--) {
+            right[i] = right[i + 1] * nums[i + 1];
+        }
+
+        // 计算最终结果，即每个位置左边元素的乘积乘以右边元素的乘积
+        int[] result = new int[n];
+        for (int i = 0; i < n; i++) {
+            result[i] = left[i] * right[i];
+        }
+
+        return result;
+    }
+}
