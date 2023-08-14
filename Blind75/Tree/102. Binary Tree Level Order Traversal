@@ -1,0 +1,65 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+
+// BFS method
+
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+    // 结果列表，用于保存每一层的节点值
+    List<List<Integer>> result = new ArrayList<>();
+    
+    // 如果根节点为空，则返回空的结果列表
+    if (root == null) {
+        return result;
+    }
+    
+    // 使用队列来进行广度优先搜索
+    Queue<TreeNode> queue = new LinkedList<>();
+    // 将根节点加入队列
+    queue.add(root);
+    
+    // 当队列不为空时，继续处理
+    while (!queue.isEmpty()) {
+        // 获取当前层的节点数量
+        int size = queue.size();
+        // 创建一个列表来保存当前层的节点值
+        List<Integer> currentLevel = new ArrayList<>();
+        
+        // 遍历当前层的每一个节点
+        for (int i = 0; i < size; i++) {
+            // 取出队列的第一个节点
+            TreeNode currentNode = queue.poll();
+            // 将当前节点的值加入当前层的列表
+            currentLevel.add(currentNode.val);
+            // 如果当前节点有左子节点，将其加入队列
+            if (currentNode.left != null) {
+                queue.add(currentNode.left);
+            }
+            // 如果当前节点有右子节点，将其加入队列
+            if (currentNode.right != null) {
+                queue.add(currentNode.right);
+            }
+        }
+        
+        // 将当前层的节点值列表加入结果列表
+        result.add(currentLevel);
+    }
+    
+    // 返回结果列表
+    return result;
+}
+
+}
