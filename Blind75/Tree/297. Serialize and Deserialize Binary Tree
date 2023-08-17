@@ -1,0 +1,194 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+ // （速度最快） DFS 前序遍历
+public class Codec {
+    // 使用逗号来分隔每个节点的值
+    private static final String split = ",";
+    // 使用"null"来表示空节点
+    private static final String NN = "null";
+
+    // 序列化
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        buildString(root, sb);
+        return sb.toString();
+    }
+
+    private void buildString(TreeNode node, StringBuilder sb) {
+        if (node == null) {
+            sb.append(NN).append(split);
+        } else {
+            sb.append(node.val).append(split);
+            buildString(node.left, sb);
+            buildString(node.right, sb);
+        }
+    }
+
+    // 反序列化
+    public TreeNode deserialize(String data) {
+        LinkedList<String> nodes = new LinkedList<>();
+        nodes.addAll(Arrays.asList(data.split(split)));
+        return buildTree(nodes);
+    }
+
+    private TreeNode buildTree(LinkedList<String> nodes) {
+        String val = nodes.remove();
+        if (val.equals(NN)) return null;
+        else {
+            TreeNode node = new TreeNode(Integer.parseInt(val));
+            node.left = buildTree(nodes);
+            node.right = buildTree(nodes);
+            return node;
+        }
+    }
+}
+
+/* （速度不如dfs）BFS
+public class Codec {
+    private static final String split = ",";
+    private static final String NN = "null";
+
+    // 序列化
+    public String serialize(TreeNode root) {
+        if (root == null) {
+            return "";
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        
+        while (!queue.isEmpty()) {
+            TreeNode current = queue.poll();
+            if (current == null) {
+                sb.append(NN).append(split);
+            } else {
+                sb.append(current.val).append(split);
+                queue.offer(current.left);
+                queue.offer(current.right);
+            }
+        }
+        return sb.toString();
+    }
+
+    // 反序列化
+    public TreeNode deserialize(String data) {
+        if (data.isEmpty()) {
+            return null;
+        }
+        
+        String[] values = data.split(split);
+        TreeNode root = new TreeNode(Integer.parseInt(values[0]));
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        
+        for (int i = 1; i < values.length; i++) {
+            TreeNode current = queue.poll();
+            if (!values[i].equals(NN)) {
+                current.left = new TreeNode(Integer.parseInt(values[i]));
+                queue.offer(current.left);
+            }
+            if (!values[++i].equals(NN)) {
+                current.right = new TreeNode(Integer.parseInt(values[i]));
+                queue.offer(current.right);
+            }
+        }
+        return root;
+    }
+}
+*/
+
+
+ /* （速度最慢）第二种保存null直接转换的BFS 最直观的将输入的root直接转为列表再转为string，反之亦然 
+  都是O(n), 但这个方法由于在序列化的时候要保存null值，所以当tree足够大的时候会耗费更多时间和使用更多空间。
+import java.util.*;
+
+public class Codec {
+    // 将树转为列表的辅助方法
+    private List<Integer> treeToList(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        if (root != null) {
+            queue.offer(root);
+        }
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            if (node == null) {
+                list.add(null);
+                continue;
+            }
+            list.add(node.val);
+            queue.offer(node.left);  // 即使是null也添加，以保持完整性
+            queue.offer(node.right);
+        }
+        return list;
+    }
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+    List<Integer> list = treeToList(root);
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < list.size(); i++) {
+        if (list.get(i) == null) {
+            sb.append("null");
+        } else {
+            sb.append(list.get(i));
+        }
+        // Only append comma if it's not the last element
+        if (i < list.size() - 1) {
+            sb.append(",");
+        }
+    }
+    return sb.toString();
+}
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+    String[] parts = data.split(",");
+    List<Integer> list = new ArrayList<>();
+    for (String part : parts) {
+        if (part.equals("null")) {
+            list.add(null);
+        } else if (!part.isEmpty()) { // Handle possible empty strings
+            list.add(Integer.parseInt(part));
+        }
+    }
+    return listToTree(list);
+}
+
+
+
+
+    // 将列表转为树的辅助方法
+    private TreeNode listToTree(List<Integer> list) {
+        if (list == null || list.isEmpty() || list.get(0) == null) {
+            return null;
+        }
+        
+        TreeNode root = new TreeNode(list.get(0));
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        
+        for (int i = 1; i < list.size(); i += 2) {
+            TreeNode parent = queue.poll();
+            
+            if (list.get(i) != null) {
+                parent.left = new TreeNode(list.get(i));
+                queue.offer(parent.left);
+            }
+            if (i + 1 < list.size() && list.get(i + 1) != null) {
+                parent.right = new TreeNode(list.get(i + 1));
+                queue.offer(parent.right);
+            }
+        }
+        return root;
+    }
+}
+*/
