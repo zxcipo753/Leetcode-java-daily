@@ -1,0 +1,32 @@
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        backtrack(result, new ArrayList<>(), candidates, target, 0);
+        return result;
+    }
+
+    private void backtrack(List<List<Integer>> result, List<Integer> combination, int[] candidates, int remain, int start) {
+        // 如果剩余和为0，说明找到了一个有效的组合，加入到结果列表中
+        if (remain == 0) {
+            result.add(new ArrayList<>(combination));
+            return;
+        }
+        
+        for (int i = start; i < candidates.length; i++) {
+            // 如果当前数小于等于剩余和，可以尝试加入到组合中
+            if (candidates[i] <= remain) {
+                combination.add(candidates[i]);
+                // 因为数字可以重复使用，所以递归时起始位置仍为i
+                backtrack(result, combination, candidates, remain - candidates[i], i);
+                // 回溯，移除最后加入的元素，尝试下一个元素
+                combination.remove(combination.size() - 1);
+            }
+        }
+    }
+}
+
+1.首先，我们需要一个辅助函数来进行回溯，这个函数需要维护当前的组合combination，当前组合的和sum，以及当前考虑的起始位置start。
+2.从start开始，遍历candidates数组，对于每一个数，我们有两个选择：要么加入当前组合中，要么不加入。
+3.如果加入当前数后，和等于target，那么我们找到了一个有效的组合，将其加入结果列表中。
+4.如果加入当前数后，和小于target，那么我们需要继续探索这个方向，即再次调用回溯函数，此时start不变，因为我们可以重复选择相同的数。
+5.如果加入当前数后，和大于target，或者已经遍历完数组，那么这条路径就不可能得到有效的组合，回溯到上一步。
