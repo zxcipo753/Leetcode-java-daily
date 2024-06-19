@@ -1,0 +1,23 @@
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, amount + 1); // 初始化所有金额为一个较大的值，表示初始时无法凑成
+        dp[0] = 0; // 金额为 0 时不需要硬币
+
+        for (int i = 1; i <= amount; i++) { //i即target（希望找零的金额/希望凑出的金额）
+            for (int coin : coins) { //for (int j = 0; j < coins.length; j++)
+                if (i >= coin) {
+                    // 如果当前金额 i 可以使用硬币 coin 凑成
+                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+                }
+            }
+        }
+
+        return dp[amount] > amount ? -1 : dp[amount];
+        /*if (dp[amount] > amount) {
+    return -1;
+} else {
+    return dp[amount];
+}*/
+    }
+}
