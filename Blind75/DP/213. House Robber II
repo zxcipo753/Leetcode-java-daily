@@ -1,0 +1,51 @@
+class Solution {
+    public int rob(int[] nums) {
+        // 边界条件
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        if (nums.length == 1) {
+            return nums[0];
+        }
+
+        // 求解两个子问题
+        int max1 = robRange(nums, 0, nums.length - 2);
+        int max2 = robRange(nums, 1, nums.length - 1);
+
+        // 返回两个子问题的最大值
+        return Math.max(max1, max2);
+    }
+
+    // 解决从start到end的抢劫问题
+    private int robRange(int[] nums, int start, int end) {
+        if (start == end) {
+            return nums[start];
+        }
+        
+        int[] dp = new int[end - start + 1];
+        dp[0] = nums[start];
+        dp[1] = Math.max(nums[start], nums[start + 1]);
+
+        for (int i = 2; i <= end - start; i++) {
+            dp[i] = Math.max(dp[i - 1], nums[start + i] + dp[i - 2]);
+        }
+
+        return dp[end - start];
+    }
+}
+
+/*解题思路：
+由于房屋排列成一个环形，抢劫第一间房屋和抢劫最后一间房屋会导致冲突。因此，我们可以将问题拆分为两个子问题：
+
+不抢劫第一间房屋，从第二间房屋到最后一间房屋抢劫。
+不抢劫最后一间房屋，从第一间房屋到倒数第二间房屋抢劫。
+然后我们对这两个子问题分别求解，取最大值即可。
+
+具体步骤：
+如果 nums 为空或长度为 0，返回 0。
+如果 nums 长度为 1，返回 nums[0]。
+将原问题分成两个子问题：
+子问题1：不抢劫第一间房屋（考虑 nums[1] 到 nums[n-1]）。
+子问题2：不抢劫最后一间房屋（考虑 nums[0] 到 nums[n-2]）。
+使用之前解决 House Robber I 问题的方法分别解决这两个子问题。
+返回这两个子问题解的最大值。*/
